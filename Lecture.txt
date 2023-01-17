@@ -1,0 +1,95 @@
+DB 
+	SQL => Table (RDBMS)
+	NoSQL => Document : Mongo, 
+
+	GraphDB => Neo4J
+
+Sequelize - ORM - SQL = MySQL, Postgres, MSSQL, DB2, Oracle
+( ORM : Object Relation Mapping )
+
+Lib : mysql2, sequelize
+
+----
+npm i sequelize mysql2 express
+
+----
+
+const sequelize = new Sequelize({
+    host: 'localhost',
+    username: 'root',
+    password: 'Codecamp2021',
+    database: 'cc13_shop',
+    dialect: 'mysql'
+})
+
+sequelize.query('Create Database cc13_lab01')
+.then(console.log)
+
+-----
+
+const PersonInRoom = sequelize.define('PersonInRoom', {
+    firstName : DataTypes.STRING,
+    lastName : {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+}, {
+    // freezeTableName: true,
+    // tableName: 'Users',
+    // underscored: true,
+    timestamps: false
+})
+
+const Product = sequelize.define('Product', {
+    productId : {
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        // allowNull: false,
+        primaryKey: true
+    },
+    name: DataTypes.STRING,
+    price: DataTypes.DECIMAL(10,2),
+    note: DataTypes.STRING
+},{
+    timestamps: false
+})
+
+// sequelize.sync({force:true})
+
+
+Product.create({
+    name: 'Excel',
+    price: 200.75,
+    note: 'Excel Book'
+}).then( rs => console.log(rs))
+
+
+// PersonInRoom.sync({force: true})
+
+// Product.sync({force: true})
+
+--------------
+
+sequelize init:config
+
+edit config.json - password, database
+
+sequelize db:create
+
+sequelize init:models
+
+gen each model 
+
+sequelize.sync({force:true})
+
+--------------
+
+1. Register 
+	- Bcrypt : Hash then save
+2. Login 1st time
+	- Bcrypt : Hash then check
+	- send token 
+3. Still Login - JWT (Json Web Token)
+	- Who are you : Already login
+	- no need login every time
+	- check Token
