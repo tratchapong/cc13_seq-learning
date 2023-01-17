@@ -6,7 +6,7 @@ const router = express.Router()
 router.post('/register', userController.register )
 router.post('/login', userController.login)
 router.get('/private', authenticate, (req, res) => {
-    res.json({msg: 'This is private zone'})
+    res.json({msg: 'This is private zone for '+req.user.username})
 })
 
-module.exports = router
+module.exports = routerS
