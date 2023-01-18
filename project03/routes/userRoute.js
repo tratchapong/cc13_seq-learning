@@ -9,4 +9,4 @@ router.get('/private', authenticate, (req, res) => {
     res.json({msg: 'This is private zone for '+req.user.username})
 })
 
-module.exports = routerS
+module.exports = router

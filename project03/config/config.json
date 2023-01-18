@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "Codecamp2021",
-    "database": "cc13_lab02",
+    "database": "cc13_lab04",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

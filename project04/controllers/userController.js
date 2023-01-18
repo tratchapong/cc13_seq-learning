@@ -21,27 +21,20 @@ exports.register =  (req,res,next) => {
 
 exports.login = (req,res,next) => {
     const {username, password} = req.body
+    let userOK = {}
     User.findOne({ where : {username : username}})
     .then( user => {
-        if(!user) {
-            // res.json({msg : 'cannot login'})
-            throw new Error('cannot login')
-        }
-        return user
-    }).then( user => {
-      return ({
-        pw_ok : bcrypt.compare(password, user.password),
-        user: user
-      }) 
-    }).then( ({pw_ok, user}) => {
-        console.log(pw_ok)
-        console.log(user)
-        if(!pw_ok) {
-            throw new Error('cannot login')
-        }
+        if (!user)
+            throw new Error('Cannot Login 1')
+        return    userOK = user
+    }).then( () => {
+        return bcrypt.compare(password, userOK.password)
+    }).then( (pw_ok) => {
+        if(!pw_ok) 
+            throw new Error('Cannot Login 2')
         const payload = {
-            id: user.id, 
-            username : user.username
+            id: userOK.id, 
+            username : userOK.username
         }
         const token = jwt.sign(payload, 'TheSecret', { expiresIn : '30d'})
         res.json( {token : token,msg: 'Welcome ,' + username})
