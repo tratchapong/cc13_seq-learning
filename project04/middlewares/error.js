@@ -1,8 +1,18 @@
 module.exports = (err, req, res, next) => {
     console.log('-------ERROR----------')
-    // [code, message] = err.message.split(':')
-    // err.message = message
-    // console.dir(err)
-    console.log(err.message.split(':'))
-    res.status(500).json({msg: err.message})
+    console.log(JSON.stringify(err, null,2))
+    if((err.name).startsWith('Sequelize')) {
+      err.s_code = 400
+      err.message = err.errors[0].message
+    }else {
+      let errText = err.message.split('::')
+      if(errText.length === 2) {
+        err.s_code = errText[0]
+        err.message = errText[1]
+      } else {
+        err.s_code = 500
+        err.message = errText[0]
+      }
+    }
+      res.status(err.s_code).json({msg: err.message})
   }

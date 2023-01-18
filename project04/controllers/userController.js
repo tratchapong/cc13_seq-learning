@@ -25,13 +25,13 @@ exports.login = (req,res,next) => {
     User.findOne({ where : {username : username}})
     .then( user => {
         if (!user)
-            throw new Error('Cannot Login 1')
+            throw new Error('401::Cannot Login 1')
         return    userOK = user
     }).then( () => {
         return bcrypt.compare(password, userOK.password)
     }).then( (pw_ok) => {
         if(!pw_ok) 
-            throw new Error('Cannot Login 2')
+            throw new Error('401::Cannot Login 2')
         const payload = {
             id: userOK.id, 
             username : userOK.username
