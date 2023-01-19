@@ -21,18 +21,15 @@ exports.register =  (req,res,next) => {
 
 exports.login = (req,res,next) => {
     const {username, password} = req.body
-    let userOK = {}
     User.findOne({ where : {username : username}})
     .then( user => {
         if (!user)
             throw new Error('401::Cannot Login 1')
-        return  user
-    }).then( (user) => {
-        let pw_ok = bcrypt.compare(password, user.password)
         return Promise.all([
-            pw_ok,
+            bcrypt.compare(password, user.password),
             Promise.resolve(user)])
-    }).then( ([pw_ok, user]) => {
+    })
+    .then( ([pw_ok, user]) => {
         if(!pw_ok) 
             throw new Error('401::Cannot Login 2')
         const payload = {
