@@ -26,18 +26,15 @@ exports.login = (req,res,next) => {
     .then( user => {
         if (!user)
             throw new Error('401::Cannot Login 1')
-        return  user
-    }).then( (user) => {
-        let pw_ok = bcrypt.compare(password, user.password)
-        return Promise.all([
-            pw_ok,
-            Promise.resolve(user)])
-    }).then( ([pw_ok, user]) => {
+        return    userOK = user
+    }).then( () => {
+        return bcrypt.compare(password, userOK.password)
+    }).then( (pw_ok) => {
         if(!pw_ok) 
             throw new Error('401::Cannot Login 2')
         const payload = {
-            id: user.id, 
-            username : user.username
+            id: userOK.id, 
+            username : userOK.username
         }
         const token = jwt.sign(payload, 'TheSecret', { expiresIn : '30d'})
         res.json( {token : token,msg: 'Welcome ,' + username})
